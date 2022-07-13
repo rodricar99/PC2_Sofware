@@ -14,14 +14,14 @@ db = SQLAlchemy(app)
 
 class ClientePublisher(db.Model):
     __tablename__ = 'cliente_publicador'
-    id = db.Column(db.Integer, primary_key=True)
+    ideaea = db.Column(db.Integer, primary_key=True)
     messages = db.Column(db.String(80), nullable=False)
     topic = db.Column(db.String(10), nullable=False)
     estatus=db.Column(db.Boolean, nullable=False)
 
 class ClienteSubscriber(db.Model):
     __tablename__ = 'cliente_subscriptor'
-    id = db.Column(db.Integer, primary_key=True)
+    idea = db.Column(db.Integer, primary_key=True)
     message_view = db.Column(db.String(80), nullable=False)
     topic_view= db.Column(db.String(10), nullable=False)
 
@@ -37,11 +37,11 @@ def authenticate_data():
     try:
 
         comando=request.get_json()[type]
-        id = request.get_json()['id']
+        idea = request.get_json()['idea']
         message = request.get_json()['Message']
         topic = request.get_json()['Topic']
         estatus = request.get_json()['estatus']
-        db.session.query(ClientePublisher).filter(ClientePublisher.id == id).filter(ClientePublisher.message== message).filter(ClientePublisher.topic == topic).filter(ClientePublisher.estatus == estatus)
+        db.session.query(ClientePublisher).filter(ClientePublisher.idea == idea).filter(ClientePublisher.message== message).filter(ClientePublisher.topic == topic).filter(ClientePublisher.estatus == estatus)
         response['type'] = comando
 
     except:
@@ -63,10 +63,10 @@ def response_data():
     try:
 
         comando2=request.get_json()[type]
-        id = request.get_json()['id']
+        idea = request.get_json()['idea']
         message_view = request.get_json()['Message_view']
         topic_view = request.get_json()['Topic_view']
-        db.session.query(ClientePublisher).filter(ClienteSubscriber.id == id).filter(ClienteSubscriber.message_view== message_view).filter(ClienteSubscriber.topic_view == topic_view)
+        db.session.query(ClientePublisher).filter(ClienteSubscriber.idea == idea).filter(ClienteSubscriber.message_view== message_view).filter(ClienteSubscriber.topic_view == topic_view)
         response['type'] = comando2
 
     except:
