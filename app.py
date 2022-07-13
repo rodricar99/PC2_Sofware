@@ -12,14 +12,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-class Cliente_Publisher(db.Model):
+class ClientePublisher(db.Model):
     __tablename__ = 'cliente_publicador'
     id = db.Column(db.Integer, primary_key=True)
     messages = db.Column(db.String(80), nullable=False)
     topic = db.Column(db.String(10), nullable=False)
     status=db.Column(db.Boolean, nullable=False)
 
-class Cliente_Subscriber(db.Model):
+class ClienteSubscriber(db.Model):
     __tablename__ = 'cliente_subscriptor'
     id = db.Column(db.Integer, primary_key=True)
     message_view = db.Column(db.String(80), nullable=False)
@@ -41,7 +41,7 @@ def authenticate_data():
         message = request.get_json()['Message']
         topic = request.get_json()['Topic']
         Status = request.get_json()['status']
-        db.session.query(Cliente_Publisher).filter(Cliente_Publisher.id == id).filter(Cliente_Publisher.message== message).filter(Cliente_Publisher.topic == topic).filter(Cliente_Publisher.Status == Status)
+        db.session.query(ClientePublisher).filter(ClientePublisher.id == id).filter(ClientePublisher.message== message).filter(ClientePublisher.topic == topic).filter(ClientePublisher.Status == Status)
         response['type'] = comando
 
     except:
@@ -66,7 +66,7 @@ def response_data():
         id = request.get_json()['id']
         message_view = request.get_json()['Message_view']
         topic_view = request.get_json()['Topic_view']
-        db.session.query(Cliente_Publisher).filter(Cliente_Subscriber.id == id).filter(Cliente_Subscriber.message_view== message_view).filter(Cliente_Subscriber.topic_view == topic_view)
+        db.session.query(ClientePublisher).filter(ClienteSubscriber.id == id).filter(ClienteSubscriber.message_view== message_view).filter(ClienteSubscriber.topic_view == topic_view)
         response['type'] = comando2
 
     except:
