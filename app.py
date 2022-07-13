@@ -44,7 +44,7 @@ def authenticate_data():
         db.session.query(ClientePublisher).filter(ClientePublisher.idea == idea).filter(ClientePublisher.message== message).filter(ClientePublisher.topic == topic).filter(ClientePublisher.estatus == estatus)
         response['type'] = comando
 
-    except:
+    except FileNotFoundError:
         error = True
         db.session.rollback()
         print(sys.exc_info())
@@ -69,7 +69,7 @@ def response_data():
         db.session.query(ClientePublisher).filter(ClienteSubscriber.idea == idea).filter(ClienteSubscriber.message_view== message_view).filter(ClienteSubscriber.topic_view == topic_view)
         response['type'] = comando2
 
-    except:
+    except FileNotFoundError:
         error = True
         db.session.rollback()
         print(sys.exc_info())
