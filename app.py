@@ -31,15 +31,44 @@ db.create_all()
 
 
 @app.route('/Publisher', methods=['POST'])
-def authenticate_user():
+def authenticate_data():
     error = False
     response = {}
     try:
+
+        comando=request.get_json()[type]
         id = request.get_json()['id']
         message = request.get_json()['Message']
         topic = request.get_json()['Topic']
         Status = request.get_json()['status']
         db.session.query(Cliente_Publisher).filter(Cliente_Publisher.id == id).filter(Cliente_Publisher.message== message).filter(Cliente_Publisher.topic == topic).filter(Cliente_Publisher.Status == Status)
+        response['type'] = comando
+
+    except:
+        error = True
+        db.session.rollback()
+        print(sys.exc_info())
+    finally:
+        db.session.close()
+    if error:
+        response['error_message'] = "no existe el usuario"
+    response['error'] = error
+    return jsonify(response)
+
+
+@app.route('/subscriber', methods=['GET'])
+def response_data():
+    error = False
+    response = {}
+    try:
+
+        comando2=request.get_json()[type]
+        id = request.get_json()['id']
+        message_view = request.get_json()['Message_view']
+        topic_view = request.get_json()['Topic_view']
+        db.session.query(Cliente_Publisher).filter(Cliente_Subscriber.id == id).filter(Cliente_Subscriber.message_view== message_view).filter(Cliente_Subscriber.topic_view == topic_view)
+        response['type'] = comando2
+
     except:
         error = True
         db.session.rollback()

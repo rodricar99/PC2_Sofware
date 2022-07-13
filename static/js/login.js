@@ -26,4 +26,15 @@ document.getElementById("publisher").onsubmit = function(e){
         console.log(error)
         document.getElementById("error").className=''
     });
+    fetch('/subscriber', {
+        method : 'GET',
+        body: JSON.stringify({
+            'id': document.getElementById('id').value,
+            'message_view': document.getElementById('message_view').value,
+            'topic_view': document.getElementById('topic_view').value,
+            
+        }),
+        headers : {
+            'Content-Type' : 'application/json'
+},
 }
