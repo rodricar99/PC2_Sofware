@@ -1,6 +1,6 @@
 from email import message
 import re
-from telnetlib import STATUS
+from telnetlib import estatus
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import sys
@@ -17,7 +17,7 @@ class ClientePublisher(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     messages = db.Column(db.String(80), nullable=False)
     topic = db.Column(db.String(10), nullable=False)
-    status=db.Column(db.Boolean, nullable=False)
+    estatus=db.Column(db.Boolean, nullable=False)
 
 class ClienteSubscriber(db.Model):
     __tablename__ = 'cliente_subscriptor'
@@ -40,8 +40,8 @@ def authenticate_data():
         id = request.get_json()['id']
         message = request.get_json()['Message']
         topic = request.get_json()['Topic']
-        Status = request.get_json()['status']
-        db.session.query(ClientePublisher).filter(ClientePublisher.id == id).filter(ClientePublisher.message== message).filter(ClientePublisher.topic == topic).filter(ClientePublisher.Status == Status)
+        estatus = request.get_json()['estatus']
+        db.session.query(ClientePublisher).filter(ClientePublisher.id == id).filter(ClientePublisher.message== message).filter(ClientePublisher.topic == topic).filter(ClientePublisher.estatus == estatus)
         response['type'] = comando
 
     except:
