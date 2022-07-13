@@ -1,35 +1,45 @@
+from email import message
+import re
+from telnetlib import STATUS
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import sys
 from sqlalchemy import sql
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:melendez2016@localhost:5432/software2'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:carlitosdion123@localhost:5432/sofware2'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-class Usuario(db.Model):
-    __tablename__ = 'usuario'
+class Cliente_Publisher(db.Model):
+    __tablename__ = 'cliente_publicador'
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(80), nullable=False)
-    contraseña = db.Column(db.String(80), nullable=False)
+    messages = db.Column(db.String(80), nullable=False)
+    topic = db.Column(db.String(10), nullable=False)
+    status=db.Column(db.Boolean, nullable=False)
 
+class Cliente_Subscriber(db.Model):
+    __tablename__ = 'cliente_subscriptor'
+    id = db.Column(db.Integer, primary_key=True)
+    message_view = db.Column(db.String(80), nullable=False)
+    topic_view= db.Column(db.String(10), nullable=False)
 
 db.create_all()
 
-# LOGEAR USUARIOS
 
 
-@app.route('/authenticate/login', methods=['POST'])
+
+@app.route('/Publisher', methods=['POST'])
 def authenticate_user():
     error = False
     response = {}
     try:
-        username = request.get_json()['username']
-        password = request.get_json()['password']
-        db.session.query(Usuario).filter(Usuario.nombre == username).filter(
-            Usuario.contraseña == password).one()
+        id = request.get_json()['id']
+        message = request.get_json()['Message']
+        topic = request.get_json()['Topic']
+        Status = request.get_json()['status']
+        db.session.query(Cliente_Publisher).filter(Cliente_Publisher.id == id).filter(Cliente_Publisher.message== message).filter(Cliente_Publisher.topic == topic).filter(Cliente_Publisher.Status == Status)
     except:
         error = True
         db.session.rollback()
@@ -37,10 +47,17 @@ def authenticate_user():
     finally:
         db.session.close()
     if error:
-        response['error_message'] = "Usuario o contraseña incorrecto"
+        response['error_message'] = "no existe el usuario"
     response['error'] = error
     return jsonify(response)
 
+
+@app.route('/subscriber', methods=['GET'])
+def create_todo_get():
+    description=request.args.get("descripcion")
+    todo=todo(description=description)
+    db.session.add(todo)
+    db.session.commit
 
 @app.route('/')
 def index():

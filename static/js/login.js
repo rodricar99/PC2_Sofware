@@ -1,10 +1,12 @@
-document.getElementById("login").onsubmit = function(e){
+document.getElementById("publisher").onsubmit = function(e){
     e.preventDefault();
-    fetch('/authenticate/login', {
+    fetch('/publisher', {
         method : 'POST',
         body: JSON.stringify({
-            'username': document.getElementById('username').value,
-            'password': document.getElementById('password').value
+            'id': document.getElementById('id').value,
+            'message': document.getElementById('message').value,
+            'topic': document.getElementById('topic').value,
+            'status': document.getElementById('status').value
         }),
         headers : {
             'Content-Type' : 'application/json'
@@ -14,7 +16,7 @@ document.getElementById("login").onsubmit = function(e){
     }).then(function(jsonResponse){
         console.log(jsonResponse)
         if(jsonResponse['error'] === false){
-            alert("Te logeaste")
+            alert("no se registro nada")`
             document.getElementById("error").className='hidden'
         }else{
             document.getElementById("error").className=''
