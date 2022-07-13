@@ -52,17 +52,13 @@ def authenticate_user():
     return jsonify(response)
 
 
-@app.route('/subscriber', methods=['GET'])
-def create_todo_get():
-    description=request.args.get("descripcion")
-    todo=todo(description=description)
-    db.session.add(todo)
-    db.session.commit
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
+@app.route('/ingresar_data')
+def index():
+    return render_template('ingresar.html')
 
 if __name__ == '__main__':
     app.run(port=5003, debug=True)
